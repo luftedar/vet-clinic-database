@@ -1,5 +1,4 @@
--- Please Note Here. Lines Between 3 to 83 are output of the postgresql for the requirements.
--- You can see the queries after line 83.
+--
 -- PostgreSQL database dump
 --
 
@@ -31,7 +30,8 @@ CREATE TABLE public.animals (
     date_of_birth date,
     escape_attempts integer,
     neutered boolean,
-    weight_kg numeric
+    weight_kg numeric,
+    species character varying(100)
 );
 
 
@@ -55,11 +55,17 @@ ALTER TABLE public.animals ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 -- Data for Name: animals; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_kg) FROM stdin;
-2	Agumon		2020-02-03	0	t	10.23
-3	Gabumon	2018-11-15	2	t	8
-4	Pikachu	2021-01-07	1	f	15.04
-5	Devimon	2017-05-12	5	t	11
+COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_kg, species) FROM stdin;
+2	Agumon	2020-02-03	0	t	10.23	\N
+3	Gabumon	2018-11-15	2	t	8	\N
+4	Pikachu	2021-01-07	1	f	15.04	\N
+5	Devimon	2017-05-12	5	t	11	\N
+6	Charmander	2020-02-08	0	f	-11	\N
+7	Plantmon	2022-11-15	2	t	-5.7	\N
+8	Squirtle	1993-04-02	3	t	-12.13	\N
+9	Angemon	2005-06-12	1	t	-45	\N
+10	Boarmon	2005-06-07	7	t	20.4	\N
+11	Blossom	1998-10-13	3	t	17	\N
 \.
 
 
@@ -67,7 +73,7 @@ COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_
 -- Name: animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.animals_id_seq', 5, true);
+SELECT pg_catalog.setval('public.animals_id_seq', 11, true);
 
 
 --
@@ -81,79 +87,4 @@ ALTER TABLE ONLY public.animals
 --
 -- PostgreSQL database dump complete
 --
-
---Find all animals whose name ends in "mon".
-SELECT * FROM animals WHERE name LIKE '%mon';
--- id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
-----+---------+---------------+-----------------+----------+-----------
---  2 | Agumon  | 2020-02-03    |               0 | t        |     10.23
---  3 | Gabumon | 2018-11-15    |               2 | t        |         8
---  5 | Devimon | 2017-05-12    |               5 | t        |        11
---(3 rows)
-
-
---List the name of all animals born between 2016 and 2019.
-SELECT name FROM animals WHERE date_of_birth BETWEEN '1-1-2016' AND '1-1-2019';
---  name   
------------
--- Gabumon
--- Devimon
---(2 rows)
-
-
-
---List the name of all animals that are neutered and have less than 3 escape attempts.
-SELECT name FROM animals WHERE neutered=true AND escape_attempts<3;
---  name   
----------
--- Agumon
--- Gabumon
---(2 rows)
-
---List date of birth of all animals named either "Agumon" or "Pikachu".
-SELECT date_of_birth FROM animals WHERE name='Agumon' OR name='Pikachu';
--- date_of_birth 
----------------
--- 2020-02-03
--- 2021-01-07
---(2 rows)
-
-
---List name and escape attempts of animals that weigh more than 10.5kg
-vet-clinic=# SELECT name,escape_attempts FROM animals WHERE weight_kg>10.5;
---  name   | escape_attempts 
----------+-----------------
--- Pikachu |               1
--- Devimon |               5
---(2 rows)
-
-
---Find all animals that are neutered.
-vet-clinic=# SELECT * FROM animals WHERE neutered = true;
--- id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
-----+---------+---------------+-----------------+----------+-----------
---  2 | Agumon  | 2020-02-03    |               0 | t        |     10.23
---  3 | Gabumon | 2018-11-15    |               2 | t        |         8
---  5 | Devimon | 2017-05-12    |               5 | t        |        11
---(3 rows)
-
-
---Find all animals not named Gabumon.
-
-vet-clinic=# SELECT * FROM animals WHERE NOT name = 'Gabumon';
--- id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
-----+---------+---------------+-----------------+----------+-----------
---  2 | Agumon  | 2020-02-03    |               0 | t        |     10.23
---  4 | Pikachu | 2021-01-07    |               1 | f        |     15.04
---  5 | Devimon | 2017-05-12    |               5 | t        |        11
---(3 rows)
-
-
---Find all animals with a weight between 10.4kg and 17.3kg (including the animals with the weights --that equals precisely 10.4kg or 17.3kg)
-vet-clinic=# SELECT * FROM animals WHERE weight_kg >= 10.4 AND weight_kg <= 17.3;
--- id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
-----+---------+---------------+-----------------+----------+-----------
---  4 | Pikachu | 2021-01-07    |               1 | f        |     15.04
---  5 | Devimon | 2017-05-12    |               5 | t        |        11
---(2 rows)
 
