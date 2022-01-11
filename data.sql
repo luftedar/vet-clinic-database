@@ -1,5 +1,3 @@
--- Please Note Here. Lines Between 3 to 83 are output of the postgresql for the requirements.
--- You can see the queries after line 83.
 -- PostgreSQL database dump
 --
 
@@ -31,7 +29,8 @@ CREATE TABLE public.animals (
     date_of_birth date,
     escape_attempts integer,
     neutered boolean,
-    weight_kg numeric
+    weight_kg numeric,
+    species character varying(100)
 );
 
 
@@ -55,11 +54,17 @@ ALTER TABLE public.animals ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 -- Data for Name: animals; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_kg) FROM stdin;
-2	Agumon		2020-02-03	0	t	10.23
-3	Gabumon	2018-11-15	2	t	8
-4	Pikachu	2021-01-07	1	f	15.04
-5	Devimon	2017-05-12	5	t	11
+COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_kg, species) FROM stdin;
+2	Agumon		2020-02-03	0	t	10.23	\N
+3	Gabumon	2018-11-15	2	t	8	\N
+4	Pikachu	2021-01-07	1	f	15.04	\N
+5	Devimon	2017-05-12	5	t	11	\N
+6	Charmander	2020-02-08	0	f	-11	\N
+7	Plantmon	2022-11-15	2	t	-5.7	\N
+8	Squirtle	1993-04-02	3	t	-12.13	\N
+9	Angemon	2005-06-12	1	t	-45	\N
+10	Boarmon	2005-06-07	7	t	20.4	\N
+11	Blossom	1998-10-13	3	t	17	\N
 \.
 
 
@@ -67,7 +72,7 @@ COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_
 -- Name: animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.animals_id_seq', 5, true);
+SELECT pg_catalog.setval('public.animals_id_seq', 11, true);
 
 
 --
@@ -83,62 +88,60 @@ ALTER TABLE ONLY public.animals
 --
 
 
---Animal: His name is Agumon. He was born on Feb 3rd, 2020, and currently weighs 10.23kg. He was neutered and he has never tried to escape.
+--His name is Charmander. He was born on Feb 8th, 2020, and currently weighs -11kg. He is not neutered and he has never tried to escape.
 INSERT INTO animals (
-    name,
-    date_of_birth,
-    escape_attempts,
-    neutered,
-    weight_kg
-    ) VALUES (
-        'Agumon',
-        '2020-2-3',
-        0,
-        true,
-        10.23
-        );
+name,
+date_of_birth,
+weight_kg,
+neutered,
+escape_attempts) VALUES ('Charmander', '08-02-2020', -11, false, 0);
 
---Animal: Her name is Gabumon. She was born on Nov 15th, 2018, and currently weighs 8kg. She is neutered and she has tried to escape 2 times.
-INSERT INTO animals (
-    name,
-    date_of_birth,
-    escape_attempts,
-    neutered,
-    weight_kg
-    ) VALUES (
-        'Gabumon',
-        '2018-11-15',
-        2,
-        true,
-        8
-        );
+--Her name is Plantmon. She was born on Nov 15th, 2022, and currently weighs -5.7kg. She is neutered and she has tried to escape 2 times.
 
---Animal: His name is Pikachu. He was born on Jan 7th, 2021, and currently weighs 15.04kg. He was not neutered and he has tried to escape once.
 INSERT INTO animals (
-    name,
-    date_of_birth,
-    escape_attempts,
-    neutered,
-    weight_kg
-    ) VALUES (
-        'Pikachu',
-        '2021-1-7',
-        1,
-        false,
-        15.04
-        );
+name,
+date_of_birth,
+weight_kg,
+neutered,
+escape_attempts) VALUES ('Plantmon', '15-11-2022', -5.7, true, 2);
 
---Animal: Her name is Devimon. She was born on May 12th, 2017, and currently weighs 11kg. She is neutered and she has tried to escape 5 times.
+
+--His name is Squirtle. He was born on Apr 2nd, 1993, and currently weighs -12.13kg. He was not neutered and he has tried to 3 times.
+
 INSERT INTO animals (
-    name,
-    date_of_birth,
-    escape_attempts,
-    neutered,
-    weight_kg
-    ) VALUES (
-        'Devimon',
-        '2017-5-12',
-        5,
-        true,
-        11
-        );
+name,
+date_of_birth,
+weight_kg,
+neutered,
+escape_attempts) VALUES ('Squirtle', '02-04-1993', -12.13, true, 3);
+
+
+--His name is Angemon. He was born on Jun 12th, 2005, and currently weighs -45kg. He is neutered and he has tried to escape once.
+
+INSERT INTO animals (
+name,
+date_of_birth,
+weight_kg,
+neutered,
+escape_attempts) VALUES ('Angemon', '12-06-2005', -45, true, 1);
+
+
+--His name is Boarmon. He was born on Jun 7th, 2005, and currently weighs 20.4kg. He is neutered and he has tried to escape 7 times.
+
+INSERT INTO animals (
+name,
+date_of_birth,
+weight_kg,
+neutered,
+escape_attempts) VALUES ('Boarmon', '07-06-2005', 20.4, true, 7);
+
+
+--Her name is Blossom. She was born on Oct 13th, 1998, and currently weighs 17kg. She is neutered and she has tried to escape 3 times.
+
+INSERT INTO animals (
+name,
+date_of_birth,
+weight_kg,
+neutered,
+escape_attempts) VALUES ('Blossom', '13-10-1998', 17, true, 3);
+
