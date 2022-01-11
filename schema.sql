@@ -25,23 +25,57 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.animals (
-    id integer,
+    id integer NOT NULL,
     name character varying(100),
     date_of_birth date,
     escape_attempts integer,
     neutered boolean,
-    weight_kg numeric
+    weight_kg numeric,
+    species character varying(100)
 );
 
 
 ALTER TABLE public.animals OWNER TO postgres;
 
 --
+-- Name: animals_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.animals ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.animals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Data for Name: animals; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_kg) FROM stdin;
+COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_kg, species) FROM stdin;
+2	Agumon	2020-02-03	0	t	10.23	\N
+3	Gabumon	2018-11-15	2	t	8	\N
+4	Pikachu	2021-01-07	1	f	15.04	\N
+5	Devimon	2017-05-12	5	t	11	\N
 \.
+
+
+--
+-- Name: animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.animals_id_seq', 5, true);
+
+
+--
+-- Name: animals animals_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.animals
+    ADD CONSTRAINT animals_pkey PRIMARY KEY (id);
 
 
 --
