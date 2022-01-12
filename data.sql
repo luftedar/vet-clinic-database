@@ -37,58 +37,6 @@ CREATE TABLE public.animals (
 
 
 ALTER TABLE public.animals OWNER TO postgres;
-
---
--- Name: animals_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.animals ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.animals_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- Data for Name: animals; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_kg, species) FROM stdin;
-2	Agumon		2020-02-03	0	t	10.23	\N
-3	Gabumon	2018-11-15	2	t	8	\N
-4	Pikachu	2021-01-07	1	f	15.04	\N
-5	Devimon	2017-05-12	5	t	11	\N
-6	Charmander	2020-02-08	0	f	-11	\N
-7	Plantmon	2022-11-15	2	t	-5.7	\N
-8	Squirtle	1993-04-02	3	t	-12.13	\N
-9	Angemon	2005-06-12	1	t	-45	\N
-10	Boarmon	2005-06-07	7	t	20.4	\N
-11	Blossom	1998-10-13	3	t	17	\N
-\.
-
-
---
--- Name: animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.animals_id_seq', 11, true);
-
-
---
--- Name: animals animals_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.animals
-    ADD CONSTRAINT animals_pkey PRIMARY KEY (id);
-
-
---
--- PostgreSQL database dump complete
---
-
 --Animal: His name is Agumon. He was born on Feb 3rd, 2020, and currently weighs 10.23kg. He was neutered and he has never tried to escape.
 INSERT INTO animals (
     name,

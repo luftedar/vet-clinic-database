@@ -23,146 +23,82 @@ SET default_table_access_method = heap;
 --
 -- Name: animals; Type: TABLE; Schema: public; Owner: postgres
 --
-
-CREATE TABLE public.animals (
-    id integer NOT NULL,
-    name character varying(100),
-    date_of_birth date,
-    escape_attempts integer,
-    neutered boolean,
-    weight_kg numeric,
-    species character varying(100)
-);
-
-
-ALTER TABLE public.animals OWNER TO postgres;
-
---
--- Name: animals_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.animals ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.animals_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- Data for Name: animals; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.animals (id, name, date_of_birth, escape_attempts, neutered, weight_kg, species) FROM stdin;
-2	Agumon	2020-02-03	0	t	10.23	digimon
-3	Gabumon	2018-11-15	2	t	8	digimon
-5	Devimon	2017-05-12	5	t	11	digimon
-10	Boarmon	2005-06-07	7	t	20.4	digimon
-4	Pikachu	2021-01-07	1	f	15.04	pokemon
-11	Blossom	1998-10-13	3	t	17	pokemon
-9	Angemon	2005-06-12	1	t	45	digimon
-6	Charmander	2020-02-08	0	f	11	pokemon
-8	Squirtle	1993-04-02	3	t	12.13	pokemon
-\.
-
-
---
--- Name: animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.animals_id_seq', 11, true);
-
-
---
--- Name: animals animals_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.animals
-    ADD CONSTRAINT animals_pkey PRIMARY KEY (id);
-
-
---
--- PostgreSQL database dump complete
---
-
 --Find all animals whose name ends in "mon".
 SELECT * FROM animals WHERE name LIKE '%mon';
--- id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
+ id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
 ----+---------+---------------+-----------------+----------+-----------
---  2 | Agumon  | 2020-02-03    |               0 | t        |     10.23
---  3 | Gabumon | 2018-11-15    |               2 | t        |         8
---  5 | Devimon | 2017-05-12    |               5 | t        |        11
---(3 rows)
+  2 | Agumon  | 2020-02-03    |               0 | t        |     10.23
+  3 | Gabumon | 2018-11-15    |               2 | t        |         8
+  5 | Devimon | 2017-05-12    |               5 | t        |        11
+(3 rows)
 
 
 --List the name of all animals born between 2016 and 2019.
 SELECT name FROM animals WHERE date_of_birth BETWEEN '1-1-2016' AND '1-1-2019';
---  name   
+  name   
 -----------
--- Gabumon
--- Devimon
---(2 rows)
+ Gabumon
+ Devimon
+(2 rows)
 
 
 
 --List the name of all animals that are neutered and have less than 3 escape attempts.
 SELECT name FROM animals WHERE neutered=true AND escape_attempts<3;
---  name   
+  name   
 ---------
--- Agumon
--- Gabumon
---(2 rows)
+ Agumon
+ Gabumon
+(2 rows)
 
 --List date of birth of all animals named either "Agumon" or "Pikachu".
 SELECT date_of_birth FROM animals WHERE name='Agumon' OR name='Pikachu';
--- date_of_birth 
+ date_of_birth 
 ---------------
--- 2020-02-03
--- 2021-01-07
---(2 rows)
+ 2020-02-03
+ 2021-01-07
+(2 rows)
 
 
 --List name and escape attempts of animals that weigh more than 10.5kg
 SELECT name,escape_attempts FROM animals WHERE weight_kg>10.5;
---  name   | escape_attempts 
+  name   | escape_attempts 
 ---------+-----------------
--- Pikachu |               1
--- Devimon |               5
---(2 rows)
+ Pikachu |               1
+ Devimon |               5
+2 rows)
 
 
 --Find all animals that are neutered.
 SELECT * FROM animals WHERE neutered = true;
--- id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
+ id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
 ----+---------+---------------+-----------------+----------+-----------
---  2 | Agumon  | 2020-02-03    |               0 | t        |     10.23
---  3 | Gabumon | 2018-11-15    |               2 | t        |         8
---  5 | Devimon | 2017-05-12    |               5 | t        |        11
---(3 rows)
+  2 | Agumon  | 2020-02-03    |               0 | t        |     10.23
+  3 | Gabumon | 2018-11-15    |               2 | t        |         8
+  5 | Devimon | 2017-05-12    |               5 | t        |        11
+(3 rows)
 
 
 --Find all animals not named Gabumon.
 
 SELECT * FROM animals WHERE NOT name = 'Gabumon';
--- id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
+id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
 ----+---------+---------------+-----------------+----------+-----------
---  2 | Agumon  | 2020-02-03    |               0 | t        |     10.23
---  4 | Pikachu | 2021-01-07    |               1 | f        |     15.04
---  5 | Devimon | 2017-05-12    |               5 | t        |        11
---(3 rows)
+ 2 | Agumon  | 2020-02-03    |               0 | t        |     10.23
+ 4 | Pikachu | 2021-01-07    |               1 | f        |     15.04
+ 5 | Devimon | 2017-05-12    |               5 | t        |        11
+(3 rows)
 
 --Find all animals with a weight between 10.4kg and 17.3kg (including the animals with the weights --that equals precisely 10.4kg or 17.3kg)
 SELECT * FROM animals WHERE weight_kg >= 10.4 AND weight_kg <= 17.3;
--- id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
-----+---------+---------------+-----------------+----------+-----------
---  4 | Pikachu | 2021-01-07    |               1 | f        |     15.04
---  5 | Devimon | 2017-05-12    |               5 | t        |        11
---(2 rows)
+ id |  name   | date_of_birth | escape_attempts | neutered | weight_kg 
+--+---------+---------------+-----------------+----------+-----------
+  4 | Pikachu | 2021-01-07    |               1 | f        |     15.04
+  5 | Devimon | 2017-05-12    |               5 | t        |        11
+(2 rows)
 
 
--- PLEASE NOTE THAT PROJECT REQUIRMENTS START FROM HERE
+-- START FROM HERE
 
 --Inside a transaction update the animals table by setting the species column to unspecified. Verify that change was made. Then roll back the change and verify that species columns went back to the state before tranasction.
 BEGIN;
@@ -279,35 +215,35 @@ COMMIT;
 COMMIT
 
 --How many animals are there?
-vet-clinic=# SELECT COUNT(name) FROM animals;
+SELECT COUNT(name) FROM animals;
  count 
 -------
      9
 (1 row)
 
 --How many animals have never tried to escape?
-vet-clinic=# SELECT COUNT(name) FROM animals WHERE escape_attempts = 0;
+SELECT COUNT(name) FROM animals WHERE escape_attempts = 0;
  count 
 -------
      2
 (1 row)
 
 --What is the average weight of animals?
-vet-clinic=# SELECT AVG(weight_kg) FROM animals;
+ SELECT AVG(weight_kg) FROM animals;
          avg         
 ---------------------
  16.6444444444444444
 (1 row)
 
 --Who escapes the most, neutered or not neutered animals?
-vet-clinic=# SELECT name, escape_attempts FROM animals WHERE escape_attempts = (SELECT MAX(escape_attempts) FROM animals);
+ SELECT name, escape_attempts FROM animals WHERE escape_attempts = (SELECT MAX(escape_attempts) FROM animals);
   name   | escape_attempts 
 ---------+-----------------
  Boarmon |               7
 (1 row)
 
 --What is the minimum and maximum weight of each type of animal?
-vet-clinic=# SELECT species, MIN(weight_kg), MAX(weight_kg) FROM animals GROUP BY species;
+SELECT species, MIN(weight_kg), MAX(weight_kg) FROM animals GROUP BY species;
  species | min | max 
 ---------+-----+-----
  pokemon |  11 |  17
@@ -315,7 +251,7 @@ vet-clinic=# SELECT species, MIN(weight_kg), MAX(weight_kg) FROM animals GROUP B
 (2 rows)
 
 --What is the average number of escape attempts per animal type of those born between 1990 and 2000?
-vet-clinic=# SELECT species, AVG(escape_attempts) FROM animals WHERE date_of_birth>='1-1-1990' AND date_of_birth<'1-1-2000' GROUP BY species;
+SELECT species, AVG(escape_attempts) FROM animals WHERE date_of_birth>='1-1-1990' AND date_of_birth<'1-1-2000' GROUP BY species;
  species |        avg         
 ---------+--------------------
  pokemon | 3.0000000000000000
