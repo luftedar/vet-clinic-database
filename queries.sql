@@ -97,9 +97,6 @@ SELECT * FROM animals WHERE weight_kg >= 10.4 AND weight_kg <= 17.3;
   5 | Devimon | 2017-05-12    |               5 | t        |        11
 (2 rows)
 
-
--- START FROM HERE
-
 --Inside a transaction update the animals table by setting the species column to unspecified. Verify that change was made. Then roll back the change and verify that species columns went back to the state before tranasction.
 BEGIN;
 BEGIN
@@ -257,6 +254,86 @@ SELECT species, AVG(escape_attempts) FROM animals WHERE date_of_birth>='1-1-1990
  pokemon | 3.0000000000000000
 (1 row)
 
+
+-- STARTS HERE --
+
+--What animals belong to Melody Pond?
+SELECT animals.name FROM animals 
+JOIN owners on animals.owners_id = owners.id WHERE owners.full_name = 'Melody Pond';
+
+    name    
+------------
+ Blossom
+ Squirtle
+ Charmander
+(3 rows)
+
+
+--List of all animals that are pokemon (their type is Pokemon).
+SELECT animals.*, species.name as species_name from animals 
+JOIN species on animals.species_id = species.id WHERE species.name = 'Pokemon';
+
+    name    | date_of_birth | escape_attempts | neutered | weight_kg | id | species_id | owners_id | species_name 
+------------+---------------+-----------------+----------+-----------+----+------------+-----------+--------------
+ Blossom    | 1998-10-13    |               3 | t        |        17 |  6 |          1 |         4 | Pokemon
+ Squirtle   | 1993-04-02    |               3 | t        |     12.13 |  9 |          1 |         4 | Pokemon
+ Charmander | 2020-02-08    |               0 | f        |        11 |  8 |          1 |         4 | Pokemon
+ Pikachu    | 2021-01-07    |               1 | f        |     15.04 |  5 |          1 |         2 | Pokemon
+(4 rows)
+
+
+
+
+--List all owners and their animals, remember to include those that don't own any animal.
+SELECT animals.name as animal_name, owners.fulL_name as owner_name from owners 
+LEFT JOIN animals on owners.id = animals.owners_id;
+
+
+
+--How many animals are there per species?
+SELECT species.name, COUNT(*) from animals 
+JOIN species ON species.id = animals.species_id GROUP BY species.name;
+
+  name   | count 
+---------+-------
+ Pokemon |     4
+ Digimon |     5
+(2 rows)
+
+
+--List all Digimon owned by Jennifer Orwell.
+SELECT animals.name as animal_name, owners.full_name as owner_name, species.name as species_name from animals
+JOIN species ON species.id = animals.species_id JOIN owners ON owners.id = animals.owners_id WHERE species.name = 'Digimon' AND owners.full_name = 'Jennifer Orwell';
+
+ animal_name |   owner_name    | species_name 
+-------------+-----------------+--------------
+ Gabumon     | Jennifer Orwell | Digimon
+(1 row)
+
+
+
+--List all animals owned by Dean Winchester that haven't tried to escape.
+SELECT * from animals
+JOIN owners ON animals.owners_id = owners.id WHERE owners.full_name = 'Dean Winchester' AND animals.escape_attempts = 0;
+
+ name | date_of_birth | escape_attempts | neutered | weight_kg | id | species_id | owners_id | id | full_name | age 
+------+---------------+-----------------+----------+-----------+----+------------+-----------+----+-----------+-----
+(0 rows)
+
+
+--Who owns the most animals?
+SELECT owners.full_name, COUNT(animals.name) as num_animals from owners
+LEFT JOIN animals ON owners.id = animals.owners_id GROUP BY owners.full_name ORDER BY num_animals DESC;
+
+
+    full_name    | num_animals 
+-----------------+-------------
+ Melody Pond     |           3
+ Jodie Whittaker |           2
+ Jennifer Orwell |           2
+ Bob             |           1
+ Sam Smith       |           1
+(5 rows)
 
 
 
