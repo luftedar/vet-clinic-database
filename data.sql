@@ -1,3 +1,5 @@
+-- STARTS FROM LINE 150--
+
 -- PostgreSQL database dump
 --
 
@@ -146,6 +148,8 @@ INSERT INTO animals (
         true,
         11
         );
+
+-- START FROM HERE--
 
 --His name is Charmander. He was born on Feb 8th, 2020, and currently weighs -11kg. He is not neutered and he has never tried to escape.
 INSERT INTO animals (
